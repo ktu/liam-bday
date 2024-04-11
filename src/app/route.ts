@@ -39,6 +39,10 @@ function checkWord(word: string): string {
   }
 }
 
+export function GET() {
+  return "Hello, Liam! :3"
+}
+
 export async function POST(request: Request) {
     var response = ""
     const { word }: { word: string } = await request.json()
