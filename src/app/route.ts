@@ -1,3 +1,5 @@
+const SUPER_PASSWORD = "happybirthday!"
+
 const mappings: { [key: string]: string } = {
   "october": "y",
   "midway": "d",
@@ -13,18 +15,43 @@ const mappings: { [key: string]: string } = {
   "bast": "a",
   "seven": "p",
   "elodin": "b",
-  "contradictions": "This is the first coordinate!"
+  "contradictions": "This is the first coordinate!",
+  SUPER_PASSWORD: "/yippee/"
+}
+
+function checkWord(word: string): string {
+  var charsMatching = SUPER_PASSWORD
+  var charsExtra = ""
+  for (let i = 0; i < word.length; i++) {
+    if (charsMatching.indexOf(word[i]) !== -1) {
+      charsMatching = charsMatching.replace(word[i], "")
+    } else {
+      charsExtra += word[i]
+    }
+  }
+
+  if (charsMatching.length === 0) {
+    return charsExtra
+  } else if (charsExtra.length === 0) {
+    return charsMatching
+  } else {
+    return charsMatching.length > charsExtra.length ? charsMatching : charsExtra
+  }
 }
 
 export async function POST(request: Request) {
     var response = ""
     const { word }: { word: string } = await request.json()
-    if (word === "happybirthday!") {
-      response = "/yippee/"
-    } else if (word === "ydrahpiyt!hapb") {
-      response = "Maybe try rearranging the letters!"
+    const testWord = checkWord(word)
+
+    if (word === SUPER_PASSWORD) {
+      response = "/yippee/" 
     } else if (Object.keys(mappings).includes(word)) {
       response = mappings[word]
+    } else if (testWord.length === 0) {
+      response = "Maybe try rearranging the letters!"
+    } else if (testWord.length > 0 && testWord.length <= 2) {
+      response = "You might be missing a few letters or have a few extra!" 
     } else if (!!word) {
       response = "I don't know what to do with that word :("
     } else {
