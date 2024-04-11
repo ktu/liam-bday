@@ -40,7 +40,7 @@ function checkWord(word: string): string {
 }
 
 export function GET() {
-  return "Hello, Liam! :3"
+  return new Response("Hello, Liam! :3")
 }
 
 export async function POST(request: Request) {
