@@ -55,7 +55,7 @@ class Board extends Component {
     showClue = () => {
         this.setState((prevState) => ({ 
             ...prevState,
-            message: "contradictions"
+            message: "contradictions + 30"
         }))
     }
 
