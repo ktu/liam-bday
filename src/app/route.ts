@@ -47,7 +47,8 @@ export async function POST(request: Request) {
     var response = ""
 
     const contentType = request.headers.get("content-type");
-    if (contentType && contentType.indexOf("application/json") !== -1) {
+    if (!request.headers || contentType) return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
+    if (contentType!.indexOf("application/json") !== -1) {
       return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
 
     }
