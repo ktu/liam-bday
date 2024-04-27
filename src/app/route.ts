@@ -45,22 +45,29 @@ export function GET() {
 
 export async function POST(request: Request) {
     var response = ""
-    const { word }: { word: string } = await request.json()
-    const testWord = checkWord(word)
+    const requestJson = await request.json();
+    const word = requestJson.word
 
+    if (!word) return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
+
+    const testWord = checkWord(word)
+    
     if (word === SUPER_PASSWORD) {
       response = "/yippee/" 
+      return Response.json({ clue: response })
     } else if (Object.keys(mappings).includes(word)) {
       response = mappings[word]
+      return Response.json({ clue: response })
     } else if (testWord.length === 0) {
       response = "Maybe try rearranging the letters!"
+      return Response.json({ clue: response })
     } else if (testWord.length > 0 && testWord.length <= 2) {
       response = "You might be missing a few letters or have a few extra!" 
+      return Response.json({ clue: response })
     } else if (!!word) {
       response = "I don't know what to do with that word :("
-    } else {
-      response = "Please provide a body in JSON format { word: {{value}} }! :3"
+      return Response.json({ clue: response })
     }
 
-    return Response.json({ clue: response })
+    return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
   }
