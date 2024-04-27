@@ -45,19 +45,10 @@ export function GET() {
 
 export async function POST(request: Request) {
     var response = ""
+    const { word } = await request.json().catch(() => { return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" }) } )
 
-    const contentType = request.headers.get("content-type");
-    if (!request.headers || contentType) return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
-    if (contentType!.indexOf("application/json") !== -1) {
-      return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
-
-    }
-
-    const requestJson = await request.json();
-    const word = requestJson.word
-
-    if (!word) return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
-
+    if (!word || typeof word === 'undefined') { return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" }) }
+    
     const testWord = checkWord(word)
     
     if (word === SUPER_PASSWORD) {
@@ -72,10 +63,10 @@ export async function POST(request: Request) {
     } else if (testWord.length > 0 && testWord.length <= 2) {
       response = "You might be missing a few letters or have a few extra!" 
       return Response.json({ clue: response })
-    } else if (!!word) {
+    } else if (typeof word !== 'undefined') {
       response = "I don't know what to do with that word :("
       return Response.json({ clue: response })
+    } else {
+      return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
     }
-
-    return Response.json({ clue: "Please provide a body in JSON format { word: {{value}} }! :3" })
   }
